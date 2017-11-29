@@ -8,7 +8,7 @@
             "type": "node",
             "request": "launch",
             "name": "Launch Program",
-            "program": "${workspaceFolder}/JS-Basics/functions.js"
+            "program": "${workspaceFolder}/JS-Basics/arrays.js"
         }
     ]
 }
