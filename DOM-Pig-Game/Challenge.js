@@ -1,52 +1,50 @@
-/*
-GAME RULES:
-
-- The game has 2 players, playing in rounds
-- In each turn, a player rolls a dice as many times as he whishes. Each result get added to his ROUND score
-- BUT, if the player rolls a 1, all his ROUND score gets lost. After that, it's the next player's turn
-- The player can choose to 'Hold', which means that his ROUND score gets added to his GLBAL score. After that, it's the next player's turn
-- The first player to reach 100 points on GLOBAL score wins the game
-
-*/
-
-var scores, roundScore, activePlayer, dice, gamePlaying;
+var scores, roundScore, activePlayer, gamePlaying, lastDice;
 
 init();
-
-// getting a html id and setting text to it
-// document.querySelector('#current-' + activePlayer).textContent = dice;
-
-// //document.querySelector('#current-' + activePlayer).innerHTML = '<em>' + dice + '</em>'
-
-// // reading value
-// var x = document.querySelector('#score-0').textContent;
-
 
 
 // event handler - Dice roll
 document.querySelector('.btn-roll').addEventListener('click', function () {
     if (gamePlaying) {
         // generate random number
-        var diceNumber = Math.floor(Math.random() * 6) + 1;
+        var diceNumber1 = Math.floor(Math.random() * 6) + 1;
+        var diceNumber2 = Math.floor(Math.random() * 6) + 1;
 
-        // display the result
-        var diceDOM = document.querySelector('.dice');
-        diceDOM.style.display = 'block';
-        diceDOM.src = 'dice-' + diceNumber + '.png';
-
+        // display the result        
+        document.getElementById('dice-1').style.display ='block';
+        document.getElementById('dice-2').style.display ='block';
+        // 
+        document.getElementById('dice-1'.src) = 'dice-' + diceNumber1 + '.png';
+        document.getElementById('dice-2'.src) = 'dice-' + diceNumber2 + '.png';
+        
 
         // update the round score if the rolled number was not a 1
-        if (diceNumber !== 1) {
-            //add to score
-            console.log('round score = ' + roundScore);
-            console.log('dicenumber  = '+ diceNumber);            
-            roundScore += diceNumber;
-            console.log('round score = ' + roundScore);
+        if (diceNumber1 !== 1 && diceNumber2 !==1) {
+            //add to score            
+            roundScore += diceNumber1 + diceNumber2;            
             document.querySelector('#current-' + activePlayer).textContent = roundScore;
         } else {
             //zero the score
             changePlayer();
         }
+
+        // CHALLENGE 2 
+        // // update the round score if the rolled number was not a 1
+        // if (diceNumber === 6 && lastDice === 6) {
+        //     // player loses score
+        //     scores[activePlayer] = 0;
+        //     document.querySelector('#score-' + activePlayer).textContent = '0';
+        //     changePlayer();
+        // } else if (diceNumber !== 1) {
+        //     //add to score
+        //     roundScore += diceNumber;
+        //     document.querySelector('#current-' + activePlayer).textContent = roundScore;
+        // } else {
+        //     //zero the score
+        //     changePlayer();
+        // }
+
+        // lastDice = diceNumber;
     }
 });
 
@@ -60,9 +58,10 @@ function changePlayer() {
 
     // change the active player
     document.querySelector('.player-' + activePlayer + '-panel').classList.add('active');
-    // set dice invisible again
-    document.querySelector('.dice').style.display = 'none';
+    // set dice invisible again   
 
+    document.getElementById('dice-1').style.display ='none';
+    document.getElementById('dice-2').style.display ='none';
 }
 
 document.querySelector('.btn-hold').addEventListener('click', function () {
@@ -72,11 +71,23 @@ document.querySelector('.btn-hold').addEventListener('click', function () {
 
         document.querySelector('#score-' + activePlayer).textContent = scores[activePlayer];
 
+        // personal final score for winning
+        var input = document.querySelector('.final-score').value;
+        var winningScore;
+        // check for undefined, null or 0 or "" are coerced to false
+
+        if (input) {
+            winningScore = input;
+        } else {
+            winningScore = 100;
+        }
+        console.log(input);
 
         // check if the player won the game
-        if (scores[activePlayer] >= 10) {
+        if (scores[activePlayer] >= winningScore) {
             document.querySelector('#name-' + activePlayer).textContent = 'Winner!';
-            document.querySelector('.dice').style.display = 'none';
+            document.getElementById('dice-1').style.display ='none';
+            document.getElementById('dice-2').style.display ='none';
             document.querySelector('.player-' + activePlayer + '-panel').classList.add('winner');
             document.querySelector('.player-' + activePlayer + '-panel').classList.remove('active');
             gamePlaying = false;
@@ -108,9 +119,10 @@ function init() {
     roundScore = 0;
     gamePlaying = true;
     // start with no dice
-    document.querySelector('.dice').style.display = 'none';
-    //get element by id
+    document.getElementById('dice-1').style.display ='none';
+    document.getElementById('dice-2').style.display ='none';
 
+    //get element by id
     //  setup scores
     document.getElementById('score-0').textContent = '0';
     document.getElementById('score-1').textContent = '0';
